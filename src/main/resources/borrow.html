@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="zxx" xmlns:th="http://www.thymeleaf.org">
+<!--<![endif]-->
+<!-- Begin Head -->
+
+<head>
+    <title>SplashDash</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="MobileOptimized" content="320">
+    <!--Start Style -->
+    <link rel="stylesheet" type="text/css" href="static/css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="static/css/range.css">
+    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/icofont.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+	<link rel="stylesheet" id="theme-change" type="text/css" href="">
+</head>
+
+
+<body>
+<!--	<div class="loader">-->
+<!--	  <div class="spinner">-->
+<!--		<img src="static/picture/loader.gif" alt="">-->
+<!--	  </div> -->
+<!--	</div>-->
+    <!-- Main Body -->
+    <div class="page-wrapper">
+        <!-- Header Start -->
+        <div th:replace="header.html::header(${username},${uid})"></div>
+        
+        <!-- Sidebar Start -->
+        <div th:replace="sidebar.html::sidebar"></div>
+        
+        <!-- Container Start -->
+        <div class="page-wrapper">
+            <div class="main-content">
+                <!-- Page Title Start -->
+                <div class="row">
+                    <div class="colxl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-title-wrapper">
+                            <div class="page-title-box">
+                                <h4 class="page-title">All Book</h4>
+                            </div>
+                            <div class="breadcrumb-list">
+                                <ul>
+                                    <li class="breadcrumb-link">
+                                        <a href="user"><i class="fas fa-home mr-2"></i>Dashboard</a>
+                                    </li>
+                                    <li class="breadcrumb-link active">All Book</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Table Start -->
+				<div class="row">
+					<!-- Styled Table Card-->
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+						<div class="card table-card">
+							<div class="card-header pb-0">
+								<h4>Book List</h4>
+								<div class="text-danger" th:style="'visibility:'+${hasMsg}" th:text="${message}"></div>
+							</div>
+
+							<div class="card-body">
+								<div class="chart-holder">
+									<div class="table-responsive">
+										<table class="table table-styled mb-0">
+											<thead>
+											<tr>
+
+												<th>Book ID</th>
+												<th>Book Name</th>
+												<th>author</th>
+												<th>price</th>
+												<th>publisher</th>
+												<th>Remaining quantity</th>
+												<th>Borrow</th>
+												<th th:if="${admin}">Delete</th>
+												<th th:if="${admin}">Edit</th>
+											</tr>
+											</thead>
+											<tbody>
+
+											<tr th:each="book :${books}">
+
+												<td th:text="${book.bid}"></td>
+												<td th:text="${book.name}"></td>
+												<td th:text="${book.author}"></td>
+												<td th:text="${'$'+book.price}"></td>
+												<td th:text="${book.publisher}"></td>
+												<td th:text="${book.number}"></td>
+												<td>
+													<form th:id="${'borrow'+book.bid}" method="post" action="borrow">
+														<input name="bid" th:value="${book.bid}" type="hidden">
+														<input name="op" th:value="borrow" type="hidden">
+														<a th:href="'javascript:document.getElementById(\''+${'borrow'+book.bid}+'\').submit()'">Borrow</a>
+													</form>
+												</td>
+												<td th:if="${admin}">
+													<form th:id="${'delete'+book.bid}" method="post" action="borrow">
+														<input name="bid" th:value="${book.bid}" type="hidden">
+														<input name="op" th:value="delete" type="hidden">
+														<a th:href="'javascript:document.getElementById(\''+${'delete'+book.bid}+'\').submit()'">Delete</a>
+													</form>
+												</td>
+												<td class="relative" th:if="${admin}">
+													<a class="action-btn " href="javascript:void(0); ">
+														<svg class="default-size " viewbox="0 0 341.333 341.333 ">
+															<g>
+																<g>
+																	<g>
+																		<path d="M170.667,85.333c23.573,0,42.667-19.093,42.667-42.667C213.333,19.093,194.24,0,170.667,0S128,19.093,128,42.667 C128,66.24,147.093,85.333,170.667,85.333z "></path>
+																		<path d="M170.667,128C147.093,128,128,147.093,128,170.667s19.093,42.667,42.667,42.667s42.667-19.093,42.667-42.667 S194.24,128,170.667,128z "></path>
+																		<path d="M170.667,256C147.093,256,128,275.093,128,298.667c0,23.573,19.093,42.667,42.667,42.667s42.667-19.093,42.667-42.667 C213.333,275.093,194.24,256,170.667,256z "></path>
+																	</g>
+																</g>
+															</g>
+														</svg>
+													</a>
+													<div class="action-option ">
+														<form th:id="${'edit'+book.bid}" method="post" action="borrow">
+														<ul>
+															<li>
+																<input name="bid" th:value="${book.bid}" type="hidden">
+																<input name="op" th:value="edit" type="hidden">
+																<input name="num" style="width: 100px;margin-left: 10px">
+															</li>
+															<li>
+																<a th:href="'javascript:document.getElementById(\''+${'edit'+book.bid}+'\').submit()'" style="font-size: 12px">Edit Number</a>
+															</li>
+														</ul>
+														</form>
+													</div>
+												</td>
+											</tr>
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+
+
+								<div class="text-right pt-2">
+									<nav class="d-inline-block">
+										<ul class="pagination mb-0 ">
+											<li class="page-item disabled">
+												<a class="page-link" href="javascript:void(0);" tabindex="-1"><i class="fas fa-chevron-left"></i></a>
+											</li>
+											<li class="page-item active "><a class="page-link " href="javascript:void(0); ">1</a></li>
+											<li class="page-item ">
+												<a class="page-link " href="javascript:void(0); ">2</a>
+											</li>
+											<li class="page-item "><a class="page-link " href="javascript:void(0); ">3</a></li>
+											<li class="page-item ">
+												<a class="page-link " href="javascript:void(0); "><i class="fas fa-chevron-right "></i></a>
+											</li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="ad-footer-btm">
+					<p>Copyright &copy; 2021.Company name All rights reserved.<a target="_blank" href="https://sc.chinaz.com/moban/">&#x7F51;&#x9875;&#x6A21;&#x677F;</a></p>
+				</div>
+			</div>
+		</div>      
+	</div>
+
+    <!-- Slide Setting Box -->
+    <div th:replace="SlideSettingBox.html::slide-setting-box"></div>
+
+    <!-- Color Setting -->
+    <div th:replace="ColorSetting.html::ColorSetting"></div>
+    <!-- Color Setting -->
+    
+    
+    <!-- Script Start -->
+    <script src="static/js/jquery.min.js"></script>
+    <script src="static/js/range.js"></script>
+    <script src="static/js/popper.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/custom.js"></script>
+</body>
+
+</html>
